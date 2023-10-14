@@ -1,0 +1,86 @@
+package shadow;
+
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
+public class Monster {
+	int x,y,w,h,attack,defense,hp,monN;	// monN은 몬스터 식별 번호
+	boolean exist;
+	String []name = {"treeMonster", "snakeMonster", "spiderMonster", "blockMonster"};	// 몬스터 리스트
+	Image img;
+	Monster() {
+		x=0;
+		y=0;
+        w=110;
+        h=130;
+	}
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public int getW() {
+		return w;
+	}
+	public void setW(int w) {
+		this.w = w;
+	}
+	public int getH() {
+		return h;
+	}
+	public void setH(int h) {
+		this.h = h;
+	}
+	public int getAttack() {
+		return attack;
+	}
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+	public int getDefense() {
+		return defense;
+	}
+	public void setDefense(int defense) {
+		this.defense = defense;
+	}
+	public boolean isExist() {
+		return exist;
+	}
+	public void setExist(boolean exist) {
+		this.exist = exist;
+	}
+	public Image getImage() {
+		ImageIcon icon = new ImageIcon(name[monN]+".png");
+        img = icon.getImage();
+		return img;
+	}
+	public int getMonN() {
+		return monN;
+	}
+	public void setMonN(int monN) {	// 몬스터 번호를 설정해주면 공격력과 방어력이 정해짐
+		this.monN = monN;
+		switch(monN) {
+		case 0: attack=1; defense=1; hp=4;	// 나무
+		break;
+		case 1: attack=2; defense=1; hp=4;	// 뱀
+		break;
+		case 2: attack=3; defense=2; hp=4; w=150;	// 거미
+		break;
+		case 3: attack=1; defense=1; hp=6;	// 돌
+		}
+	}
+	public void moveX(int x) {
+		this.x+=x;
+	}
+	public void moveY(int y) {
+		this.y+=y;
+	}
+}
