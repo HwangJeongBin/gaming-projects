@@ -11,7 +11,11 @@ public class MainCharacter {
 	private Image img;
 	int skillX[] = new int[4];
 	int skillY[] = new int[4];
+	int skillDamage[] = new int[4];
+	int skillTurn[] = new int[4];
+	int skillTurnN[] = new int[4];	// 각 스킬의 대기 턴 수를 저장하는 변수
 	boolean skill[] = new boolean[4];
+	boolean usingSkill[] = new boolean[4];
 	MainCharacter(int W, int H) {
 		this.Width = W;
 		this.Height = H;
@@ -23,11 +27,21 @@ public class MainCharacter {
         floor=1;
         x=Width/16;
         y=Height*2/5;
-        attack=4;
+        attack=1;
         defense=0;
         hp=8;
         skillN=4;
+        skillDamage[0] = 1;
+        skillDamage[1] = 2;
+        skillDamage[2] = attack*2;
+        skillDamage[3] = attack*3;
+        skillTurnN[0]=1;
+        skillTurnN[1]=2;
+        skillTurnN[2]=3;
+        skillTurnN[3]=4;
+        // for(int i=0;i<4;i++) skillTurn[i] = skillTurnN[i];
         Arrays.fill(skill,true);
+        Arrays.fill(usingSkill,false);
 	}
 	// true-걷기 false-서기
 	void lookFront(boolean b) {
@@ -183,5 +197,26 @@ public class MainCharacter {
 	}
 	public void setSkillY(int pos, int n) {
 		this.skillY[n] = pos;
+	}
+	public boolean isUsingSkill(int i) {
+		return usingSkill[i];
+	}
+	public void setUsingSkill(boolean usingSkill, int i) {
+		if(usingSkill) skillTurn[i]=skillTurnN[i];
+		this.usingSkill[i] = usingSkill;
+	}
+	public int getSkillDamgae(int n) {
+		return skillDamage[n];
+	}
+	public void setSkillDamage(int d, int n) {
+		this.skillX[n] = d;
+	}
+	public int getSkillTurn(int i) {
+		return skillTurn[i];
+	}
+	public void decSkillTurn() {
+		for(int i=0;i<4;i++) {
+			this.skillTurn[i]--;
+		}
 	}
 }

@@ -12,7 +12,7 @@ import javax.swing.*;
 public class TempleFrame {
 	private JFrame frame;
 	private MyPanel panel;	// 층은 0층부터 시작하므로 총 탑의 층 수는 top+1
-	private int y=0, W,H, moveX, moveY, cnt=0, floor=1, top=15, moveFloor, sleeptime=70, damageY=0, damagedHP=0, gameOverH=0, toGoF=0, toGoR=0;	// floor은 화면의 층이지 캐릭터의 현재 층이 아님
+	private int y=0, W,H, moveX, moveY, cnt=0, floor=1, top=15, moveFloor, sleepTime=70, damageY=0, damagedHP=0, gameOverH=0, toGoF=0, toGoR=0, skillTime;	// floor은 화면의 층이지 캐릭터의 현재 층이 아님
 	private int stair[] = new int[top];
 	private Monster mon[][] = new Monster[top+1][3];
 	private ItemBox[][] item = new ItemBox[top+1][3];
@@ -75,6 +75,10 @@ public class TempleFrame {
         		mon[mf][mr].setMonN(i%4);
         	}
         }
+        //mon[1][1].setExist(true);
+        //mon[1][1].setMonN(1);
+        //mon[2][2].setExist(true);
+        //mon[2][2].setMonN(1);
         for(int i=0;i<top;i++) {
         	int f = (int)(Math.random()*top+1);
         	int r = (int)(Math.random()*3);
@@ -100,7 +104,7 @@ public class TempleFrame {
 			try
 			{
 			    while(true) {
-			    	//이동하는 것 보다 전투 씬이 우선 공격받는 동안은 움직이지 못함 
+			    	//이동하는 것 보다 전투 씬이 우선 공격받는 동안은 움직이지 못함
 			    	if(monAttack) {	// 몬스터 공격 애니메이션
 			    		Monster monster = mon[m.getFloor()][m.getRoomN()];
 			    		if(monster.monN==0||monster.monN==3) {	// 나무 몬스터나 블럭 몬스터이면 내려찍는 공격
@@ -155,8 +159,9 @@ public class TempleFrame {
 			    		if(cnt==16) {
 			    			mon[m.getFloor()][m.getRoomN()].setX(0);
 			    			mon[m.getFloor()][m.getRoomN()].setY(0);
+			    			m.decSkillTurn();
 			    			monAttack=false;
-			    			mainTurn=true;
+			    			if(!(moveXFlag||moveYFlag)) mainTurn=true;	// 도망갈 때 맞는 경우에는 턴을 시작하지 않음
 			    			cnt=0;
 			    			snakeBite=false;
 			    			spiderBite=false;
@@ -221,11 +226,13 @@ public class TempleFrame {
 			    		}
 			    	}
 			    	if(m.getHp()<=0) {
+			    		m.setY(m.getY()+10);
+			    		m.setH(m.getH()-10);
 		            	gameOverH+=50;
 		            	if(gameOverH>H) gameOverH=H;
 		            }
 			    	panel.repaint();
-			        Thread.sleep(sleeptime);	// 스레드 대기
+			        Thread.sleep(sleepTime);	// 스레드 대기
 			    }
 			}catch(InterruptedException e)
 			{
@@ -300,7 +307,11 @@ public class TempleFrame {
             		}
             		g.drawImage(drawRoom, j*W/3-j/2, i*H/3+y, W/3, H/3, this);
             		if(room[floor+1-i][j].isUpStair()) g.drawImage(ivy, j*W/3+W/9-W/50, i*H/3+y, W/13, H/4, this);
-            		if(mon[floor+1-i][j].isExist()&&room[floor+1-i][j].isVisit()) g.drawImage(mon[floor+1-i][j].getImage(), j*W/3+2*W/11+mon[floor+1-i][j].getX(), (i+1)*H/3-mon[floor+1-i][j].getH()+y+mon[floor+1-i][j].getY(), mon[floor+1-i][j].getW(), mon[floor+1-i][j].getH(), this);
+            		if(mon[floor+1-i][j].isExist()&&room[floor+1-i][j].isVisit()) {
+            			g.drawImage(mon[floor+1-i][j].getImage(), j*W/3+2*W/11+mon[floor+1-i][j].getX(), (i+1)*H/3-mon[floor+1-i][j].getH()+y+mon[floor+1-i][j].getY(), mon[floor+1-i][j].getW(), mon[floor+1-i][j].getH(), this);
+            			g.setColor(new Color(0xD1180B));
+            			g.fillRoundRect(j*W/3+2*W/11+mon[floor+1-i][j].getX(), (i+1)*H/3-mon[floor+1-i][j].getH()+y+mon[floor+1-i][j].getY()-20, mon[floor+1-i][j].getHp()*20, 15, 10, 10);
+            		}
             		if(item[floor+1-i][j].isExist()&&room[floor+1-i][j].isVisit()) g.drawImage(item[floor+1-i][j].getImage(), j*W/3+W/4, (i+1)*H/3-item[floor+1-i][j].getH()+y, item[floor+1-i][j].getW(), item[floor+1-i][j].getH(), this);
             	}
             	// 덩쿨 출력
@@ -330,7 +341,11 @@ public class TempleFrame {
                 		}
             			g.drawImage(drawRoom, j*W/3-j/2, y-(H/3), W/3, H/3, this);
             			if(room[floor+2][j].isUpStair()) g.drawImage(ivy, j*W/3+W/9-W/50, y-(H/3), W/13, H/4, this);
-            			if(mon[floor+2][j].isExist()&&room[floor+2][j].isVisit()) g.drawImage(mon[floor+2][j].getImage(), j*W/3+2*W/11, y-mon[floor+2][j].getH(), mon[floor+2][j].getW(), mon[floor+2][j].getH(), this);
+            			if(mon[floor+2][j].isExist()&&room[floor+2][j].isVisit()) {
+            				g.drawImage(mon[floor+2][j].getImage(), j*W/3+2*W/11, y-mon[floor+2][j].getH(), mon[floor+2][j].getW(), mon[floor+2][j].getH(), this);
+            				g.setColor(new Color(0xD1180B));
+            				g.fillRoundRect(j*W/3+2*W/11, y-mon[floor+2][j].getH()-20, mon[floor+2][j].getHp()*20, 15, 10, 10);
+            			}
             			if(item[floor+2][j].isExist()&&room[floor+2][j].isVisit()) g.drawImage(item[floor+2][j].getImage(), j*W/3+W/4, y-item[floor+2][j].getH(), item[floor+2][j].getW(), item[floor+2][j].getH(), this);
             		}
                 	if(floor+3==top) g.drawImage(portal, 7*W/9, y+2*H, W/12, H/12, this);
@@ -354,7 +369,11 @@ public class TempleFrame {
             		}
             		g.drawImage(drawRoom, j*W/3-j/2, y+H-1, W/3, H/3, this);
         			if(room[floor-2][j].isUpStair()) g.drawImage(ivy, j*W/3+W/9-W/50, y+H-1, W/13, H/4, this);
-        			if(mon[floor-2][j].isExist()&&room[floor-2][j].isVisit()) g.drawImage(mon[floor-2][j].getImage(), j*W/3+2*W/11, y+4*H/3-mon[floor-2][j].getH(), mon[floor-2][j].getW(), mon[floor-2][j].getH(), this);
+        			if(mon[floor-2][j].isExist()&&room[floor-2][j].isVisit()) {
+        				g.drawImage(mon[floor-2][j].getImage(), j*W/3+2*W/11, y+4*H/3-mon[floor-2][j].getH(), mon[floor-2][j].getW(), mon[floor-2][j].getH(), this);
+        				g.setColor(new Color(0xD1180B));
+        				g.fillRoundRect(j*W/3+2*W/11, y+4*H/3-mon[floor-2][j].getH()-20, mon[floor-2][j].getHp()*20, 15, 10, 10);
+        			}
         			if(item[floor-2][j].isExist()&&room[floor-2][j].isVisit()) g.drawImage(item[floor-2][j].getImage(), j*W/3+W/4, y+4*H/3-item[floor-2][j].getH(), item[floor-2][j].getW(), item[floor-2][j].getH(), this);
         		}
             }
@@ -376,14 +395,36 @@ public class TempleFrame {
             g.drawString(Integer.toString(m.getDefense()), 95, 60);
             if(mainTurn) {
             	int s = m.getSkillN(), cnt=0;
-            	g.drawImage(skillFrame, m.getX()+25-50*s, m.getY()-100, 100*s, 100, this);
+            	g.drawImage(skillFrame, m.getX()-40, m.getY()-100, 100*s-40, 100, this);
             	// 배열을 써서 몇번 스킬을 먼저 출력할지를 확인 / 배열을 통해 스킬 넘버 받은 후에 배열 길이 만큼 for문
             	for(int i=0;i<4;i++) {
             		if(m.haveSkill(i)) {
-            			g.drawImage(skill[i], m.getX()+60-50*s+85*cnt, m.getY()-100, 80, 100, this);
-            			m.setSkillX(m.getX()+60-50*s+85*cnt,i);
+            			m.setSkillX(m.getX()-30+85*cnt,i);
             			m.setSkillY(m.getY()-100,i);
+            			g.drawImage(skill[i], m.getSkillX(i), m.getSkillY(i), 80, 100, this);
+            			if(m.getSkillTurn(i)>0) g.drawString(Integer.toString(m.getSkillTurn(i)), m.getSkillX(i)+35, m.getSkillY(i)-10);
             			cnt++;
+            		}
+            	}
+            }
+            for(int i=0;i<4;i++) {
+            	if(m.isUsingSkill(i)) {
+            		int skillW = 250;
+            		if(i==3) skillW=300;
+            		g.drawImage(skill[i], m.getX()+W/17, m.getY()-50, skillW, 250, this);
+            		if(skillTime%10>0&&skillTime%10<5) mon[m.getFloor()][m.getRoomN()].setDamaged(true);
+            		else mon[m.getFloor()][m.getRoomN()].setDamaged(false);
+            		skillTime++;
+            		if(skillTime>50) {
+            			m.setUsingSkill(false, i);
+            			skillTime=0;
+            			mon[m.getFloor()][m.getRoomN()].damaged(m.getSkillDamgae(i));
+            			mon[m.getFloor()][m.getRoomN()].setDamaged(false);
+            			if(mon[m.getFloor()][m.getRoomN()].getHp()<=0) {	// 몬스터의 체력이 0이 되면
+            				mon[m.getFloor()][m.getRoomN()].setExist(false);	// 몬스터는 존재하지 않는다
+            				mainTurn=false;
+            			}
+            			else monAttack=true;	// 몬스터가 살아 있다면 공격
             		}
             	}
             }
@@ -399,18 +440,17 @@ public class TempleFrame {
 			// 근접한 방으로만 이동할 수 있게
 			int x = e.getX();
 			int y = e.getY();
-			if(mainTurn) {
-				int f = 1;
-				if(m.getFloor()==0) f=0;
-				int r = m.getRoomN();
-				System.out.println(W);
-				System.out.println(H);
-				Rectangle monRec = new Rectangle(r*W/3+2*W/11, (f+1)*H/3-mon[f][r].getH()+mon[f][r].getY(), mon[f][r].getW(), mon[f][r].getH());
-				if(monRec.contains(x, y)) {
-					System.out.println("공격!!");
+			if(mainTurn&&!monAttack) {
+				for(int i=0;i<4;i++) {
+					if(m.haveSkill(i)) {
+						if(!(m.isUsingSkill(i))&& new Rectangle(m.getSkillX(i), m.getSkillY(i), 80, 100).contains(x,y)) {
+							m.setUsingSkill(true, i);
+							return;
+						}
+					}
 				}
 			}
-			if((!moveXFlag)&&(!moveYFlag)&&(!monAttack)&&(!mainAttack)) {
+			if((!moveXFlag)&&(!moveYFlag)&&(!monAttack)&&(!mainAttack)&&skillTime==0) {
 				Rectangle rec[][] = new Rectangle[3][3];
 				for(int i=0;i<3;i++) {
 					for(int j=0;j<3;j++) {
@@ -439,6 +479,7 @@ public class TempleFrame {
 									toGoF=floor+1-i;
 									moveYFlag = true;
 									if(mon[m.getFloor()][m.getRoomN()].isExist()) monAttack=true;	// 캐릭터가 몬스터한테서 도망칠 경우 데미지 받고 도망
+									mainTurn=false;	// 이동하는 룸에 몬스터가 없으면 메인 캐릭터의 공격 턴을 종료
 								}
 							}
 							else if((i==1||(m.getFloor()==0&&i==2))&&(m.getRoomN()-j>=-1&&m.getRoomN()-j<=1)) {	// 옆 방으로 이동
@@ -446,6 +487,7 @@ public class TempleFrame {
 								moveXFlag = true;
 								moveX = ((j-m.getRoomN())*W/3);
 								if(mon[m.getFloor()][m.getRoomN()].isExist()) monAttack=true;	// 캐릭터가 몬스터한테서 도망칠 경우 데미지 받고 도망
+								mainTurn=false;	// 이동하는 룸에 몬스터가 없으면 메인 캐릭터의 공격 턴을 종료
 								toGoR=j;
 								if(m.getFloor()==0) room[0][j].setVisit(true);
 								else room[floor][j].setVisit(true);

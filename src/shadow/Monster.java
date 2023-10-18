@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Monster {
 	int x,y,w,h,attack,defense,hp,monN;	// monN은 몬스터 식별 번호
-	boolean exist;
+	boolean exist, damaged;
 	String []name = {"treeMonster", "snakeMonster", "spiderMonster", "blockMonster"};	// 몬스터 리스트
 	Image img;
 	Monster() {
@@ -14,6 +14,7 @@ public class Monster {
 		y=0;
         w=110;
         h=130;
+        hp=4;
 	}
 	public int getX() {
 		return x;
@@ -58,8 +59,14 @@ public class Monster {
 		this.exist = exist;
 	}
 	public Image getImage() {
-		ImageIcon icon = new ImageIcon(name[monN]+".png");
-        img = icon.getImage();
+		if(damaged) {
+			ImageIcon icon = new ImageIcon("damaged"+name[monN]+".png");
+	        img = icon.getImage();
+		}
+		else {
+			ImageIcon icon = new ImageIcon(name[monN]+".png");
+        	img = icon.getImage();
+		}
 		return img;
 	}
 	public int getMonN() {
@@ -69,12 +76,17 @@ public class Monster {
 		this.monN = monN;
 		switch(monN) {
 		case 0: attack=1; defense=1; hp=4;	// 나무
+		System.out.println(0);
 		break;
 		case 1: attack=2; defense=1; hp=4;	// 뱀
+		System.out.println(1);
 		break;
 		case 2: attack=3; defense=2; hp=4; w=150;	// 거미
+		System.out.println(2);
 		break;
 		case 3: attack=1; defense=1; hp=6;	// 돌
+		System.out.println(3);
+		break;
 		}
 	}
 	public void moveX(int x) {
@@ -82,5 +94,20 @@ public class Monster {
 	}
 	public void moveY(int y) {
 		this.y+=y;
+	}
+	public int getHp() {
+		return this.hp;
+	}
+	public void setHp(int hp) {
+		this.hp = hp;
+	}
+	public void damaged(int h) {
+		hp-=h;
+	}
+	public boolean isDamaged() {
+		return damaged;
+	}
+	public void setDamaged(boolean damaged) {
+		this.damaged = damaged;
 	}
 }
