@@ -37,6 +37,8 @@ public class TempleFrame {
 	private Image gameOver;
 	private Image skill[] = new Image[4];
 	private Image skillFrame;
+	private Image sandglass;
+	private int itemN[] = {11,12,13,41,42};
 	
 	TempleFrame() {
 		frame = new JFrame();
@@ -69,24 +71,37 @@ public class TempleFrame {
         for(int i=0;i<top*4/3;i++) {
         	int mf = (int)(Math.random()*top+1);
         	int mr = (int)(Math.random()*3);
+        	int monN=i%4;
+        	if(monN==2&&mf<=top/2) {	// 난이도 조절을 위한 것
+        		i--;
+        		continue;
+        	}
         	if(mon[mf][mr].isExist()||room[mf][mr].isDownStair()||(mf==top&&mr==2)||(mf==1&&mr==0)) i--;	// 몬스터 세팅이 중복되지 않고 덩쿨이나 포탈 및 스폰 위치에 몬스터가 있지 않게 처리
         	else {
         		mon[mf][mr].setExist(true);
-        		mon[mf][mr].setMonN(i%4);
+        		mon[mf][mr].setMonN(monN);
         	}
         }
         //mon[1][1].setExist(true);
         //mon[1][1].setMonN(1);
         //mon[2][2].setExist(true);
         //mon[2][2].setMonN(1);
-        for(int i=0;i<top;i++) {
+        for(int i=0;i<3*top/4;i++) {
         	int f = (int)(Math.random()*top+1);
         	int r = (int)(Math.random()*3);
-        	if(f==1&&r==0) {
+        	if(item[f][r].isExist()||(f==1&&r==0)) {
         		i--;
         		continue;
         	}
+        	if(i==0) f=top/5;
+        	if(i==1) f=2*top/5;
+        	if(i==2) f=3*top/5;
+        	if(i==3) f=top/2;
+        	if(i==4) f=4*top/5;
         	item[f][r].setExist(true);
+        	if(i<5) item[f][r].setItemN(itemN[i]);
+        	else if(i%4==0) item[f][r].setItemN(3);
+        	else item[f][r].setItemN(2);
         }
         room[top-1][0].setUpStair(true);	// 포탈 위치이 있는 꼭대기 층은 항상 맨 왼쪽에 계단 생성 (포탈의 위치는 오른쪽방)
         room[1][0].setVisit(true);	// 캐릭터의 첫 생성 위치는 이미 방문했다는 것을 표시
@@ -198,6 +213,7 @@ public class TempleFrame {
 					    	}
 			    			cnt=0;
 			    			moveXFlag = false;
+			    			if(!mon[m.getFloor()][m.getRoomN()].isExist()&&item[m.getFloor()][m.getRoomN()].isExist()) item[m.getFloor()][m.getRoomN()].itemOpen(true);
 			    			if(mon[m.getFloor()][m.getRoomN()].isExist()) monAttack=true;
 			    		}
 			    	}
@@ -218,6 +234,7 @@ public class TempleFrame {
 			    			bottomFlag=false;
 			    			y=0;
 			    			floor=moveFloor;
+			    			if(!mon[m.getFloor()][m.getRoomN()].isExist()&&item[m.getFloor()][m.getRoomN()].isExist()) item[m.getFloor()][m.getRoomN()].itemOpen(true);
 			    			if(mon[m.getFloor()][m.getRoomN()].isExist()) monAttack=true;
 			    			if(m.getFloor()==top&&m.getRoomN()==2) {
 			    				frame.dispose();
@@ -278,7 +295,8 @@ public class TempleFrame {
             gameOver = icon.getImage();
             icon = new ImageIcon("skillFrame.png");
             skillFrame = icon.getImage();
-            icon = new ImageIcon("slam.png");
+            icon = new ImageIcon("sandglass.png");
+            sandglass = icon.getImage();
             for(int i=0;i<4;i++) {
             	icon = new ImageIcon("skill"+i+".gif");
             	skill[i] = icon.getImage();
@@ -312,7 +330,41 @@ public class TempleFrame {
             			g.setColor(new Color(0xD1180B));
             			g.fillRoundRect(j*W/3+2*W/11+mon[floor+1-i][j].getX(), (i+1)*H/3-mon[floor+1-i][j].getH()+y+mon[floor+1-i][j].getY()-20, mon[floor+1-i][j].getHp()*20, 15, 10, 10);
             		}
-            		if(item[floor+1-i][j].isExist()&&room[floor+1-i][j].isVisit()) g.drawImage(item[floor+1-i][j].getImage(), j*W/3+W/4, (i+1)*H/3-item[floor+1-i][j].getH()+y, item[floor+1-i][j].getW(), item[floor+1-i][j].getH(), this);
+            		if(item[floor+1-i][j].isExist()&&room[floor+1-i][j].isVisit()) {
+            			g.drawImage(item[floor+1-i][j].getImage(), j*W/3+W/4, (i+1)*H/3-item[floor+1-i][j].getH()+y, item[floor+1-i][j].getW(), item[floor+1-i][j].getH(), this);
+            			if(item[floor+1-i][j].isItemOpen()) {
+            				if(item[floor+1-i][j].getOpenTime()<40) {
+                				g.drawImage(item[floor+1-i][j].getItemImage(), j*W/3+W/4, (i+1)*H/3-item[floor+1-i][j].getH()+y, 40, 40, this);
+                				item[floor+1-i][j].incOpenTime();
+                			}
+            				else {
+        						switch(item[floor+1-i][j].getItemN()) {
+        						case 11:
+        							m.getSkill(1);
+        							break;
+        						case 12:
+        							m.getSkill(2);
+        							break;
+        						case 13:
+        							m.getSkill(3);
+        					        break;
+        						case 2:
+        							m.incHp();
+        					        break;
+        						case 3:
+        							m.incCoolDown();
+        					        break;
+        						case 41:
+        							m.incAttack();
+        					        break;
+        						case 42:
+        							m.incDefense();
+        					        break;
+        						}
+        						item[floor+1-i][j].setExist(false);
+        					}
+            			}
+            		}
             	}
             	// 덩쿨 출력
             	if(floor==top) g.drawImage(portal, 7*W/9, H/7+H/3+y, W/12, H/12, this);
@@ -346,7 +398,41 @@ public class TempleFrame {
             				g.setColor(new Color(0xD1180B));
             				g.fillRoundRect(j*W/3+2*W/11, y-mon[floor+2][j].getH()-20, mon[floor+2][j].getHp()*20, 15, 10, 10);
             			}
-            			if(item[floor+2][j].isExist()&&room[floor+2][j].isVisit()) g.drawImage(item[floor+2][j].getImage(), j*W/3+W/4, y-item[floor+2][j].getH(), item[floor+2][j].getW(), item[floor+2][j].getH(), this);
+            			if(item[floor+2][j].isExist()&&room[floor+2][j].isVisit()) {
+            				g.drawImage(item[floor+2][j].getImage(), j*W/3+W/4, y-item[floor+2][j].getH(), item[floor+2][j].getW(), item[floor+2][j].getH(), this);
+            				if(item[floor+2][j].isItemOpen()) {
+                				if(item[floor+2][j].getOpenTime()<40) {
+                    				g.drawImage(item[floor+2][j].getItemImage(), j*W/3+W/4, y-item[floor+2][j].getH(), 40, 40, this);
+                    				item[floor+2][j].incOpenTime();
+                    			}
+                				else {
+            						switch(item[floor+2][j].getItemN()) {
+            						case 11:
+            							m.getSkill(1);
+            							break;
+            						case 12:
+            							m.getSkill(2);
+            							break;
+            						case 13:
+            							m.getSkill(3);
+            					        break;
+            						case 2:
+            							m.incHp();
+            					        break;
+            						case 3:
+            							m.incCoolDown();
+            					        break;
+            						case 41:
+            							m.incAttack();
+            					        break;
+            						case 42:
+            							m.incDefense();
+            					        break;
+            						}
+            						item[floor+2][j].setExist(false);
+            					}
+            				}
+            			}
             		}
                 	if(floor+3==top) g.drawImage(portal, 7*W/9, y+2*H, W/12, H/12, this);
             	}
@@ -374,7 +460,41 @@ public class TempleFrame {
         				g.setColor(new Color(0xD1180B));
         				g.fillRoundRect(j*W/3+2*W/11, y+4*H/3-mon[floor-2][j].getH()-20, mon[floor-2][j].getHp()*20, 15, 10, 10);
         			}
-        			if(item[floor-2][j].isExist()&&room[floor-2][j].isVisit()) g.drawImage(item[floor-2][j].getImage(), j*W/3+W/4, y+4*H/3-item[floor-2][j].getH(), item[floor-2][j].getW(), item[floor-2][j].getH(), this);
+        			if(item[floor-2][j].isExist()&&room[floor-2][j].isVisit()) {
+        				g.drawImage(item[floor-2][j].getImage(), j*W/3+W/4, y+4*H/3-item[floor-2][j].getH(), item[floor-2][j].getW(), item[floor-2][j].getH(), this);
+        				if(item[floor-2][j].isItemOpen()) {
+        					if(item[floor-2][j].getOpenTime()<40) {
+        						g.drawImage(item[floor-2][j].getItemImage(), j*W/3+W/4, y+4*H/3-item[floor-2][j].getH(), 40, 40, this);
+                				item[floor-2][j].incOpenTime();
+                			}
+        					else {
+        						switch(item[floor-2][j].getItemN()) {
+        						case 11:
+        							m.getSkill(1);
+        							break;
+        						case 12:
+        							m.getSkill(2);
+        							break;
+        						case 13:
+        							m.getSkill(3);
+        					        break;
+        						case 2:
+        							m.incHp();
+        					        break;
+        						case 3:
+        							m.incCoolDown();
+        					        break;
+        						case 41:
+        							m.incAttack();
+        					        break;
+        						case 42:
+        							m.incDefense();
+        					        break;
+        						}
+        						item[floor-2][j].setExist(false);
+        					}
+        				}	
+        			}
         		}
             }
             g.drawImage(m.getImage(),m.getX(),m.getY(),m.getW(),m.getH(),this);
@@ -387,6 +507,10 @@ public class TempleFrame {
             	if((m.getHp()-damagedHP<i+1)&&inviHeart) continue;
             	g.drawImage(heart, 25*i+10, 10, 20, 20, this);
             }
+            for(int i=0;i<m.getCoolDown();i++) {
+            	System.out.println("sandglass " + m.getCoolDown());
+            	g.drawImage(sandglass, 25*i+W-150, 10, 20, 30, this);
+            }
             //g.setFont(new Font("monospaced",Font.BOLD,22));
             g.setColor(Color.WHITE);
             g.drawImage(attackIcon, 10, 40, 25, 25, this);
@@ -395,7 +519,7 @@ public class TempleFrame {
             g.drawString(Integer.toString(m.getDefense()), 95, 60);
             if(mainTurn) {
             	int s = m.getSkillN(), cnt=0;
-            	g.drawImage(skillFrame, m.getX()-40, m.getY()-100, 100*s-40, 100, this);
+            	g.drawImage(skillFrame, m.getX()-40, m.getY()-100, 100*s-10, 100, this);
             	// 배열을 써서 몇번 스킬을 먼저 출력할지를 확인 / 배열을 통해 스킬 넘버 받은 후에 배열 길이 만큼 for문
             	for(int i=0;i<4;i++) {
             		if(m.haveSkill(i)) {
@@ -421,6 +545,7 @@ public class TempleFrame {
             			mon[m.getFloor()][m.getRoomN()].damaged(m.getSkillDamgae(i));
             			mon[m.getFloor()][m.getRoomN()].setDamaged(false);
             			if(mon[m.getFloor()][m.getRoomN()].getHp()<=0) {	// 몬스터의 체력이 0이 되면
+            				if(item[m.getFloor()][m.getRoomN()].isExist()) item[m.getFloor()][m.getRoomN()].itemOpen(true);
             				mon[m.getFloor()][m.getRoomN()].setExist(false);	// 몬스터는 존재하지 않는다
             				mainTurn=false;
             			}
@@ -441,6 +566,9 @@ public class TempleFrame {
 			int x = e.getX();
 			int y = e.getY();
 			if(mainTurn&&!monAttack) {
+				if(new Rectangle(W-150, 10, 25*m.getCoolDown()+10, 30).contains(x,y)) {
+					m.useCoolDown();
+				}
 				for(int i=0;i<4;i++) {
 					if(m.haveSkill(i)) {
 						if(!(m.isUsingSkill(i))&& new Rectangle(m.getSkillX(i), m.getSkillY(i), 80, 100).contains(x,y)) {

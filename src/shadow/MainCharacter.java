@@ -7,7 +7,7 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 
 public class MainCharacter {
-	private int x,y,w,h,lv,Width,Height,roomN,floor,attack,defense,hp,skillN;	// floor 위에서 부터 0,1,2층
+	private int x,y,w,h,lv,Width,Height,roomN,floor,attack,defense,hp,skillN,coolDown=0;	// floor 위에서 부터 0,1,2층
 	private Image img;
 	int skillX[] = new int[4];
 	int skillY[] = new int[4];
@@ -29,8 +29,11 @@ public class MainCharacter {
         y=Height*2/5;
         attack=1;
         defense=0;
-        hp=8;
-        skillN=4;
+        hp=18;
+        skillN=1;
+        for(int i=0;i<4;i++) {
+        	skillTurn[i] = 0;
+        }
         skillDamage[0] = 1;
         skillDamage[1] = 2;
         skillDamage[2] = attack*2;
@@ -40,7 +43,8 @@ public class MainCharacter {
         skillTurnN[2]=3;
         skillTurnN[3]=4;
         // for(int i=0;i<4;i++) skillTurn[i] = skillTurnN[i];
-        Arrays.fill(skill,true);
+        Arrays.fill(skill,false);
+        skill[0]=true;
         Arrays.fill(usingSkill,false);
 	}
 	// true-걷기 false-서기
@@ -150,14 +154,16 @@ public class MainCharacter {
 	public int getAttack() {
 		return attack;
 	}
-	public void setAttack(int attack) {
-		this.attack = attack;
+	public void incAttack() {	// 스킬 데미지도 업데이트 해줘야됨
+		this.attack++;
+        skillDamage[2] = attack*2;
+        skillDamage[3] = attack*3;
 	}
 	public int getDefense() {
 		return defense;
 	}
-	public void setDefense(int defense) {
-		this.defense = defense;
+	public void incDefense() {
+		this.defense++;
 	}
 	public int getHp() {
 		return hp;
@@ -179,9 +185,7 @@ public class MainCharacter {
 	}
 	public void getSkill(int n) {
 		skill[n] = true;
-	}
-	public boolean[] getSkill() {
-		return skill;
+		skillN++;
 	}
 	public boolean haveSkill(int n) {
 		return skill[n];
@@ -202,8 +206,13 @@ public class MainCharacter {
 		return usingSkill[i];
 	}
 	public void setUsingSkill(boolean usingSkill, int i) {
-		if(usingSkill) skillTurn[i]=skillTurnN[i];
-		this.usingSkill[i] = usingSkill;
+		if(usingSkill) {
+			if(skillTurn[i]<=0) {
+				skillTurn[i]=skillTurnN[i];
+				this.usingSkill[i] = usingSkill;
+			}
+		}
+		else this.usingSkill[i] = usingSkill;
 	}
 	public int getSkillDamgae(int n) {
 		return skillDamage[n];
@@ -218,5 +227,26 @@ public class MainCharacter {
 		for(int i=0;i<4;i++) {
 			this.skillTurn[i]--;
 		}
+	}
+	public void incHp() {
+		hp++;
+	}
+	public int getCoolDown() {
+		return coolDown;
+	}
+	public void incCoolDown() {
+		this.coolDown++;
+	}
+	public void useCoolDown() {
+		if(coolDown<1) return;
+		int z=0;
+		for(int i=0;i<4;i++) {
+			if(skillTurn[i]<=0) z++;
+		}
+		if(z>=4) return;
+		this.coolDown--;
+        for(int i=0;i<4;i++) {
+        	skillTurn[i] = 0;
+        }
 	}
 }
