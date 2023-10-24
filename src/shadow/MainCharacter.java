@@ -29,7 +29,7 @@ public class MainCharacter {
         y=Height*2/5;
         attack=1;
         defense=0;
-        hp=18;
+        hp=1;
         skillN=1;
         for(int i=0;i<4;i++) {
         	skillTurn[i] = 0;

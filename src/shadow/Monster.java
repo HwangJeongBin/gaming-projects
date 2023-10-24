@@ -76,16 +76,12 @@ public class Monster {
 		this.monN = monN;
 		switch(monN) {
 		case 0: attack=1; defense=1; hp=4;	// 나무
-		System.out.println(0);
 		break;
 		case 1: attack=2; defense=1; hp=4;	// 뱀
-		System.out.println(1);
 		break;
 		case 2: attack=3; defense=2; hp=4; w=150;	// 거미
-		System.out.println(2);
 		break;
 		case 3: attack=1; defense=1; hp=6;	// 돌
-		System.out.println(3);
 		break;
 		}
 	}
