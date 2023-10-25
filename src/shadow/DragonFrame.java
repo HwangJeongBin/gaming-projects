@@ -3,6 +3,7 @@ package shadow;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -13,12 +14,12 @@ import javax.swing.JPanel;
 public class DragonFrame{
 	private Container contentPane;
 	private MyPanel panel;
-	private int W, H, cnt=0, sleepTime, sleepCnt=0;
+	private int W, H, cnt=0, sleepTime, sleepCnt=0,meteoCnt=0,meteoX,meteoW=60,meteoH=120;
 	private MainCharacter m;
 	private JFrame frame;
 	private MyThread t = new MyThread();
-	private boolean leftFlag=false, rightFlag=false, getNumFlag=true, sleepFlag=true, chracterMoveFlag=false;
-	private Image wakeDragon, sleepDragon;
+	private boolean leftFlag=false, rightFlag=false, getNumFlag=true, sleepFlag=true, chracterMoveFlag=false, meteoFlag=false;
+	private Image wakeDragon, sleepDragon, meteo;
 	
 	DragonFrame(int X, int Y,int W,int H) {
 		frame = new JFrame();
@@ -36,6 +37,12 @@ public class DragonFrame{
         W = contentPane.getWidth();
 		H = contentPane.getHeight();
         m.setDragonPos();
+        ImageIcon icon = new ImageIcon("staringDragon.png");
+        wakeDragon = icon.getImage();
+        icon = new ImageIcon("sleepingDragon.png");
+        sleepDragon = icon.getImage();
+        icon = new ImageIcon("meteo.png");
+        meteo = icon.getImage();
         t.start();
 	}
 	@SuppressWarnings("serial")
@@ -44,13 +51,12 @@ public class DragonFrame{
             super.paintComponent(g);
             W = contentPane.getWidth();
     		H = contentPane.getHeight();
-            ImageIcon icon = new ImageIcon("leftRoom.png");
-            wakeDragon = icon.getImage();
-            icon = new ImageIcon("sleepingDragon.png");
-            sleepDragon = icon.getImage();
             if(sleepFlag) g.drawImage(sleepDragon,0,0,W,H,this);
             else g.drawImage(wakeDragon,0,0,W,H,this);
             g.drawImage(m.getImage(),m.getX(),m.getY(),m.getW(),m.getH(),this);
+            if(meteoFlag) {
+            	g.drawImage(meteo,meteoX,meteoCnt*H/40,meteoW,meteoH,this);
+            }
         }
 	}
 	public class MyThread extends Thread
@@ -65,6 +71,18 @@ public class DragonFrame{
 			    		sleepTime=(int)Math.random()*10+50;
 			    		getNumFlag=false;
 			    	}
+			    	if(sleepTime/2==sleepCnt) {
+			    		if((int)(Math.random()*2)==0) {
+			    			meteoFlag=true;
+			    			meteoX=m.getX()+20;
+			    			meteoCnt=0;
+			    		}
+			    	}
+			    	if(meteoCnt>45) meteoFlag=false;
+			    	if(meteoFlag) {
+			    		if(m.getX() + m.getW() >= meteoX+20 && m.getX() <= meteoX+20 + meteoW && m.getY() + m.getH() >= meteoCnt*H/40 && m.getY() <= meteoCnt*H/40 + meteoH - 20) System.exit(0);	// 사각형 겹치는지 확인
+			    		meteoCnt++;
+			    	}
 			    	if(sleepCnt>sleepTime) {
 			    		sleepFlag=false;
 			    	}
@@ -78,8 +96,7 @@ public class DragonFrame{
 		    		}
 			    	if(leftFlag) {
 			    		if(cnt>1) {
-			    			if(cnt==2) m.moveUp(50);
-			    			m.setH(100);	// 쭈그리는 자세로 수정
+			    			//m.hide(false);	// 쭈그리는 자세로 수정
 			    			m.moveLeft(2);
 			    			if(cnt%2==0) m.lookBehind(true);
 			    			else m.lookBehind(false);
@@ -88,8 +105,7 @@ public class DragonFrame{
 			    	}
 			    	else if(rightFlag) {
 			    		if(cnt>1) {
-			    			if(cnt==2) m.moveUp(50);
-			    			m.setH(100);
+			    			//m.hide(false);
 			    			m.moveRight(2);
 			    			if(cnt%2==0) m.lookFront(true);
 			    			else m.lookFront(false);
@@ -98,12 +114,11 @@ public class DragonFrame{
 			    	}
 			    	else {
 			    		if(chracterMoveFlag) {
-			    			m.moveDown(50);
 			    			cnt++;
 			    			chracterMoveFlag=false;
 			    			m.lookFront(false);
 			    		}
-			    		m.setH(40);	// 쭈그리는 자세로 수정
+			    		m.hide();	// 쭈그리는 자세로 수정
 			    		cnt=0;
 			    	}
 			    	sleepCnt++;

@@ -15,7 +15,7 @@ import shadow.DragonFrame.MyKeyListener;
 public class TempleFrame {
 	private JFrame frame;
 	private MyPanel panel;	// 층은 0층부터 시작하므로 총 탑의 층 수는 top+1
-	private int y=0, W,H, moveX, moveY, cnt=0, floor=1, top=40, moveFloor, sleepTime=70, damageY=0, damagedHP=0, gameOverH=0, toGoF=0, toGoR=0, skillTime, gameOverCnt=0, keyCnt=0;	// floor은 화면의 층이지 캐릭터의 현재 층이 아님
+	private int y=0, W,H, moveX, moveY, cnt=0, floor=1, top=40, moveFloor, sleepTime=70, damageY=0, damagedHP=0, gameOverH=0, toGoF=0, toGoR=0, skillTime, gameOverCnt=0, keyCnt=0, loadingCnt=0;	// floor은 화면의 층이지 캐릭터의 현재 층이 아님
 	private int stair[] = new int[top];
 	private Monster mon[][] = new Monster[top+2][3];
 	private ItemBox[][] item = new ItemBox[top+2][3];
@@ -44,6 +44,7 @@ public class TempleFrame {
 	private Image arrowKey;
 	private Image restart;
 	private Image title;
+	private Image loadingAni;
 	private int itemN[] = {11,12,13,41,42};
 	
 	TempleFrame() {
@@ -64,6 +65,8 @@ public class TempleFrame {
         startNewCharacter();
         
         ImageIcon icon;
+        icon = new ImageIcon("loadingAnimation.gif");
+    	loadingAni = icon.getImage();
         for(int i=0;i<5;i++) {
         	icon = new ImageIcon("leftRoom"+i+".png");
         	leftRoom[i] = icon.getImage();
@@ -111,11 +114,9 @@ public class TempleFrame {
         
         t.start();
         
-        //m.setFloor(top);
-        //floor=top;
-        
 	}
 	private void startNewCharacter() {
+		loadingCnt=1;	// loading cnt가 1이상이면 로딩을 진행 중인것을 의미, 0은 로딩을 하고 있지 않는 것을 의미
 		cnt=0;
 		gameOverCnt=0;
 		keyCnt=0;
@@ -184,7 +185,12 @@ public class TempleFrame {
 			try
 			{
 			    while(true) {
-			    	//이동하는 것 보다 전투 씬이 우선 공격받는 동안은 움직이지 못함
+			    	if(loadingCnt>100) {	// 로딩은 cnt가 100이 넘어가면 종료(0은 종료를 의미)
+			    		loadingCnt=0;
+			    	}
+			    	if(loadingCnt>0){
+			    		loadingCnt++;
+			    	}
 			    	if(restartFlag) {
 			    		if(leftFlag) {
 				    		m.moveLeft(10);
@@ -202,6 +208,7 @@ public class TempleFrame {
 				    		keyCnt=0;
 				    	}
 			    	}
+			    	//이동하는 것 보다 전투 씬이 우선 공격받는 동안은 움직이지 못함
 			    	if(monAttack) {	// 몬스터 공격 애니메이션
 			    		Monster monster = mon[m.getFloor()][m.getRoomN()];
 			    		if(monster.monN==0||monster.monN==3) {	// 나무 몬스터나 블럭 몬스터이면 내려찍는 공격
@@ -347,6 +354,11 @@ public class TempleFrame {
 	class MyPanel extends JPanel {
 		public void paintComponent(Graphics g) {
             super.paintComponent(g);
+            if(loadingCnt>0) {
+            	g.drawImage(loadingAni, 0, 0, W, H, this);
+            	return;
+            }
+            
             Image drawRoom = null;
             
             int f = m.getFloor();

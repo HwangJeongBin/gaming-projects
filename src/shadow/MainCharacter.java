@@ -16,6 +16,7 @@ public class MainCharacter {
 	int skillTurnN[] = new int[4];	// 각 스킬의 대기 턴 수를 저장하는 변수
 	boolean skill[] = new boolean[4];
 	boolean usingSkill[] = new boolean[4];
+	//boolean hide=false;
 	MainCharacter(int W, int H) {
 		this.Width = W;
 		this.Height = H;
@@ -29,7 +30,7 @@ public class MainCharacter {
         y=Height*2/5;
         attack=1;
         defense=0;
-        hp=1;
+        hp=18;
         skillN=1;
         for(int i=0;i<4;i++) {
         	skillTurn[i] = 0;
@@ -80,7 +81,7 @@ public class MainCharacter {
 	}
 	void setDragonPos() {
 		x=Width/40;
-		y=Height-h;
+		y=Height-h-50;
 	}
 	void moveRight(int d) {
 		x+=d;
@@ -248,5 +249,9 @@ public class MainCharacter {
         for(int i=0;i<4;i++) {
         	skillTurn[i] = 0;
         }
+	}
+	public void hide() {
+		ImageIcon icon = new ImageIcon("hidingRightCharacter.png");
+        img = icon.getImage();
 	}
 }
