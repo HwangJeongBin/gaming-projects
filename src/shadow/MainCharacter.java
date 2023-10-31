@@ -81,7 +81,7 @@ public class MainCharacter {
 	}
 	void setDragonPos() {
 		x=Width/40;
-		y=Height-h-50;
+		y=Height-h;
 	}
 	void moveRight(int d) {
 		x+=d;
@@ -230,7 +230,7 @@ public class MainCharacter {
 		}
 	}
 	public void incHp() {
-		hp++;
+		hp+=5;
 	}
 	public int getCoolDown() {
 		return coolDown;

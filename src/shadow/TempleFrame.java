@@ -23,7 +23,7 @@ public class TempleFrame {
 	private Image rightRoom[] = new Image[5];
 	private Image middleRoom[] = new Image[5];
 	private MainCharacter m;
-	private Room room[][] = new Room[top+2][3];
+	private Room room[][] = new Room[top+3][3];
 	private MyThread t = new MyThread();
 	private boolean moveXFlag = false, moveYFlag = false, bottomFlag=false, moveBack=false, monAttack=false, snakeBite=false, spiderBite=false, mainDamage=false, inviHeart=false, mainTurn=false, mainAttack=false, restartFlag=false, leftFlag=false, rightFlag=false;
 	Container contentPane;
@@ -185,7 +185,7 @@ public class TempleFrame {
 			try
 			{
 			    while(true) {
-			    	if(loadingCnt>100) {	// 로딩은 cnt가 100이 넘어가면 종료(0은 종료를 의미)
+			    	if(loadingCnt>50) {	// 로딩은 cnt가 100이 넘어가면 종료(0은 종료를 의미)
 			    		loadingCnt=0;
 			    	}
 			    	if(loadingCnt>0){
@@ -296,9 +296,14 @@ public class TempleFrame {
 		    					moveBack=false;
 		    					m.lookFront(false);
 		    				}
-			    			if(m.getSkillN()==4&&m.getFloor()==top&&m.getRoomN()==2) {	// 스킬 갯수는 빛의 조각을 모두 모으면 4개이다. 빛의 조각을 모두 모으지 못했을 경우 다음 스테이지로 진입 불가!!
-			    				frame.dispose();
-					    		DragonFrame dragon = new DragonFrame(frame.getX(),frame.getY(),W,H);
+			    			if(m.getHp()>0&&m.getFloor()==top&&m.getRoomN()==2) {	// 스킬 갯수는 빛의 조각을 모두 모으면 4개이다. 빛의 조각을 모두 모으지 못했을 경우 다음 스테이지로 진입 불가!!
+			    				if(m.getSkillN()==4) {
+			    					frame.dispose();
+						    		//gameEnding();
+			    				}
+			    				else {
+			    					JOptionPane.showMessageDialog(null, "빛의 조각 세개를 모두 찾아야 이동이 가능합니다!!");
+			    				}
 					    	}
 			    			cnt=0;
 			    			moveXFlag = false;
@@ -325,9 +330,14 @@ public class TempleFrame {
 			    			floor=moveFloor;
 			    			if(!mon[m.getFloor()][m.getRoomN()].isExist()&&item[m.getFloor()][m.getRoomN()].isExist()) item[m.getFloor()][m.getRoomN()].itemOpen(true);
 			    			if(mon[m.getFloor()][m.getRoomN()].isExist()) monAttack=true;
-			    			if(m.getFloor()==top&&m.getRoomN()==2) {
-			    				frame.dispose();
-					    		DragonFrame dragon = new DragonFrame(frame.getX(),frame.getY(),W,H);
+			    			if(m.getHp()>0&&m.getFloor()==top&&m.getRoomN()==2) {
+			    				if(m.getSkillN()==4) {
+			    					frame.dispose();
+						    		//gameEnding();
+			    				}
+			    				else {
+			    					JOptionPane.showMessageDialog(null, "빛의 조각 세개를 모두 찾아야 이동이 가능합니다!!");
+			    				}
 					    	}
 			    		}
 			    	}

@@ -38,7 +38,7 @@ public class GameMenu {
 		panel.add(exit);
 		start.addActionListener(event -> {
 			frame.dispose();
-			new TempleFrame();
+			new DragonFrame();
 		});
 		howToPlay.addActionListener(event -> {
 			frame.dispose();
