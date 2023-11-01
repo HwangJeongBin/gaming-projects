@@ -15,7 +15,7 @@ import shadow.DragonFrame.MyKeyListener;
 public class TempleFrame {
 	private JFrame frame;
 	private MyPanel panel;	// 층은 0층부터 시작하므로 총 탑의 층 수는 top+1
-	private int y=0, W,H, moveX, moveY, cnt=0, floor=1, top=40, moveFloor, sleepTime=70, damageY=0, damagedHP=0, gameOverH=0, toGoF=0, toGoR=0, skillTime, gameOverCnt=0, keyCnt=0, loadingCnt=0;	// floor은 화면의 층이지 캐릭터의 현재 층이 아님
+	private int y=0, W,H, moveX, moveY, cnt=0, floor=1, top=40, moveFloor, sleepTime=70, damageY=0, damagedHP=0, gameOverH=0, toGoF=0, toGoR=0, skillTime, gameOverCnt=0, keyCnt=0, loadingCnt=0, gameEndingCnt=0;	// floor은 화면의 층이지 캐릭터의 현재 층이 아님
 	private int stair[] = new int[top];
 	private Monster mon[][] = new Monster[top+2][3];
 	private ItemBox[][] item = new ItemBox[top+2][3];
@@ -25,7 +25,7 @@ public class TempleFrame {
 	private MainCharacter m;
 	private Room room[][] = new Room[top+3][3];
 	private MyThread t = new MyThread();
-	private boolean moveXFlag = false, moveYFlag = false, bottomFlag=false, moveBack=false, monAttack=false, snakeBite=false, spiderBite=false, mainDamage=false, inviHeart=false, mainTurn=false, mainAttack=false, restartFlag=false, leftFlag=false, rightFlag=false;
+	private boolean moveXFlag = false, moveYFlag = false, bottomFlag=false, moveBack=false, monAttack=false, snakeBite=false, spiderBite=false, mainDamage=false, inviHeart=false, mainTurn=false, mainAttack=false, restartFlag=false, leftFlag=false, rightFlag=false, gameEndingFlag=false;
 	Container contentPane;
 	private Image darkLeftRoom[] = new Image[5];
 	private Image darkRightRoom[] = new Image[5];
@@ -45,6 +45,8 @@ public class TempleFrame {
 	private Image restart;
 	private Image title;
 	private Image loadingAni;
+	private Image darkEnding;
+	private Image ending;
 	private int itemN[] = {11,12,13,41,42};
 	
 	TempleFrame() {
@@ -111,6 +113,10 @@ public class TempleFrame {
         restart = icon.getImage();
         icon = new ImageIcon("title.png");
         title = icon.getImage();
+        icon = new ImageIcon("ending.png");
+        ending = icon.getImage();
+        icon = new ImageIcon("darkEnding.png");
+        darkEnding = icon.getImage();
         
         t.start();
         
@@ -298,8 +304,7 @@ public class TempleFrame {
 		    				}
 			    			if(m.getHp()>0&&m.getFloor()==top&&m.getRoomN()==2) {	// 스킬 갯수는 빛의 조각을 모두 모으면 4개이다. 빛의 조각을 모두 모으지 못했을 경우 다음 스테이지로 진입 불가!!
 			    				if(m.getSkillN()==4) {
-			    					frame.dispose();
-						    		//gameEnding();
+						    		gameEndingFlag=true;
 			    				}
 			    				else {
 			    					JOptionPane.showMessageDialog(null, "빛의 조각 세개를 모두 찾아야 이동이 가능합니다!!");
@@ -333,7 +338,7 @@ public class TempleFrame {
 			    			if(m.getHp()>0&&m.getFloor()==top&&m.getRoomN()==2) {
 			    				if(m.getSkillN()==4) {
 			    					frame.dispose();
-						    		//gameEnding();
+			    					gameEndingFlag=true;
 			    				}
 			    				else {
 			    					JOptionPane.showMessageDialog(null, "빛의 조각 세개를 모두 찾아야 이동이 가능합니다!!");
@@ -364,6 +369,16 @@ public class TempleFrame {
 	class MyPanel extends JPanel {
 		public void paintComponent(Graphics g) {
             super.paintComponent(g);
+            if(gameEndingFlag) {
+            	if(gameEndingCnt<40) g.drawImage(darkEnding, 0, 0, W, H, this);
+            	else if(gameEndingCnt<120) g.drawImage(ending, 0, 0, W, H, this);
+            	else {
+            		frame.dispose();
+            		new GameMenu();
+            	}
+            	gameEndingCnt++;
+            	return;
+            }
             if(loadingCnt>0) {
             	g.drawImage(loadingAni, 0, 0, W, H, this);
             	return;
