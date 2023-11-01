@@ -41,8 +41,8 @@ public class MainCharacter {
         skillDamage[3] = attack*3;
         skillTurnN[0]=1;
         skillTurnN[1]=2;
-        skillTurnN[2]=3;
-        skillTurnN[3]=4;
+        skillTurnN[2]=2;
+        skillTurnN[3]=3;
         // for(int i=0;i<4;i++) skillTurn[i] = skillTurnN[i];
         Arrays.fill(skill,false);
         skill[0]=true;
