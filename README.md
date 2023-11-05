@@ -29,5 +29,24 @@ shadow
 
 ## 게임 구성도
 
-1) MainMenu
+1) GameMenu
 ![pos](MainMenu.png)
+
+## 게임 시작 화면
+## ActionListner를 이용한 버튼 이벤트로 다른 Frame 생성 및 현재 창 종료 (버튼의 이벤트 - 게임시작(DragonFrame)/ 게임방법(HowToPlay)/ 게임 종료)
+
+<br>
+
+2)HowToPlay
+![pos](howToPlay1.png)
+![pos](howToPlay2.png)
+![pos](howToPlay3.png)
+
+3) DragonFrame
+![pos](DragonFrame.png)
+
+## 게임의 첫 번째 스테이지
+## 잠든 용의 눈을 피해 던전에 입장 해야함.
+
+4) 
+5) 
