@@ -30,4 +30,4 @@ shadow
 ## 게임 구성도
 
 1) MainMenu
-![pos](./MainMenu.png)
+![pos](MainMenu.png)
