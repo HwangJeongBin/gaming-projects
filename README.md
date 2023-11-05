@@ -3,7 +3,7 @@
 소프트웨어학과 개인 게임 개발 프로젝트, 디자인과와의 협업
 
 ## 프로젝트명  
-shadow
+shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 <br>
 
@@ -59,10 +59,24 @@ shadow
 * 게임의 첫 번째 스테이지
 * 잠든 용의 눈을 피해 던전에 입장 해야함.
 * 쓰레드를 통해 애니메이션을 구현!!
-* 용이 잠에서 깨는 시간을 Math.random()의 난수를 이용하여 조정
+* 용이 잠에서 깨는 시간 및 메테오가 떨어지는 확률을 Math.random()의 난수를 이용하여 조정
+-> Math.random()*2 - 0~1의 난수를 생성 0이 생성되었을 경우, 메테오를 떨어트림(캐릭터의 약간 앞에 떨어트려서 뒤로만 피할 수 있게 설정)
 * 키리스너를 이용하여 방향키 누를 시(keyPressed)에 이벤트를 발생(왼쪽 방향키 - leftFlag = true / 오른쪽 방향키 - rightFlag = true)
 -> 쓰레드에서 두 플래그를 if문을 통해 확인한 후 leftFlag가 true이면 왼쪽으로 이동 rightFlag가 true이면 오른쪽으로 이동
+-> 쓰레드가 불려진 횟수를 cnt에 저장 : cnt 짝수 - 걷는 이미지 / 홀수 - 서있는 이미지 (걷는 것을 구현)
+->  캐릭터 왼쪽 이동 - 왼쪽 보는 이미지 / 오른쪽 이동 - 오른쪽 보는 이미지
 * 방향키를 떼었을 경우(keyReleased), 두 플래그 모두 false (이동을 멈춤)
+* 메테오가 캐릭터에 부딪혔을 때 게임 오버 시키기 위해서 사각형 겹치는지 여부를 확인하는 공식 사용(intersect)
+-> if(x1 + w1 >= x2 && x1 <= x2 + w2 && y1 + h1 >= y2 && y1 <= y2 + h2)
+
+3-1) DragonFrame GameOver  (gameOverFlag가 true이면 GameOver 진행)
+* 용이 눈을 뜨고 있을 때 움직였거나 떨어지는 메테오에 맞으면 키리스너를 모두 return시키고 캐릭터의 머리 위에 !아이콘을 출력 & 용이 눈을 계속 뜨고 지켜보고 있음.
+* gameOverCnt를 이용하여 일정 시간이 지났을 때 GameOver화면을 출력
+-> DragonFrame 때와 같이 gameOverCnt에 따른 걷기 이미지 출력 달리는 것을 표현하기 위에 캐릭터 뒤에 흙먼지 dust.gif출력
+-> 캐릭터의 뒤에 flyingDragon.gif 출력 (용이 쫓아오고 있음을 표현)
+* gameOverCnt가 일정 수를 넘었을 때 replay & menu버튼을 출력(이미지 절대 배치)
+-> 액션리스너를 통해 버튼 클릭 이벤트 구현 (Rectangle 클래스의 Contain(Point p)를 이용하여 내가 클릭한 좌표가 버튼의 구역 안에 있는지 확인)
+-> replay 클릭 시, 캐릭터의 위치와 DragonFrame에 이용되는 변수들 초기화(gameOverFlag=false)
 
 4) 
 5) 
