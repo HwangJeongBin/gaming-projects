@@ -82,6 +82,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 ### 3-1) DragonFrame GameOver  (gameOverFlag가 true이면 GameOver 진행)
 <br>
 
+![pos](DragonFrameStaring.png) 
 ![pos](DragonFrameGameOver.png) 
 <br>
 
