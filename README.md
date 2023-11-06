@@ -31,6 +31,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 1) GameMenu
 <br>
+
 ![pos](MainMenu.png)
 
 * 게임 시작 화면
@@ -50,13 +51,14 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 * 이미지 순서대로 게임 스토리, 스테이지1(DragonFrame), 스테이지2()에 대한 설명이다.
 * ActionListner를 이용한 버튼 이벤트로 페이지의 이동을 구현
   - 현재 페이지를 변수에 저장(page) - 오른쪽 버튼을 누르면 page++ / 왼쪽 버튼을 누르면 page--를 한 후에 repaint()
-  - 화면에 이미지를 출력하기 전에 switch문을 통해 page에 따라 해당 세 이미지 중 하나를 출력
+  - 화면에 이미지를 출력하기 전에 switch문을 통해 page에 따라 해당 세 이미지 중 하나를 출력 (출력하는 Image 변수를 해당 이미지로 변경)
 * 버튼에 이미지를 넣어 디자인(롤 오버 시에 버튼이 더 어두워짐)
 
 <br>
 
 ### 3) DragonFrame
 <br>
+
 ![pos](DragonFrame.png)
 <br>
 
@@ -79,6 +81,8 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 3-1) DragonFrame GameOver  (gameOverFlag가 true이면 GameOver 진행)
 <br>
+
+![pos](DragonFrameStaring.png) 
 ![pos](DragonFrameGameOver.png) 
 <br>
 
@@ -95,6 +99,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 4) TempleFrame
 <br>
+
 ![pos](TempleFrame.png)
 <br>
 
@@ -127,6 +132,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 4-1) TemPleFrame GameOver
 <br>
+
 ![pos](TempleFrameGameOver.png)
 <br>
 
