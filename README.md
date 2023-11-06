@@ -31,6 +31,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 1) GameMenu
 <br>
+
 ![pos](MainMenu.png)
 
 * 게임 시작 화면
@@ -57,6 +58,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 3) DragonFrame
 <br>
+
 ![pos](DragonFrame.png)
 <br>
 
@@ -79,6 +81,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 3-1) DragonFrame GameOver  (gameOverFlag가 true이면 GameOver 진행)
 <br>
+
 ![pos](DragonFrameGameOver.png) 
 <br>
 
@@ -95,6 +98,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 4) TempleFrame
 <br>
+
 ![pos](TempleFrame.png)
 <br>
 
@@ -127,6 +131,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 4-1) TemPleFrame GameOver
 <br>
+
 ![pos](TempleFrameGameOver.png)
 <br>
 
