@@ -5,7 +5,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class ItemBox {
-	int w,h,attack,defense,openTime=0, itemN;	//itemN 11,12,13은 빛의 조각(이용할 수 있는 스킬이 늘어남) | 2는 hp | 3은 스킬 쿨 다운 | 41/42는 공격력/방어력 증가
+	int w,h,openTime=0, itemN;	//itemN 11,12,13은 빛의 조각(이용할 수 있는 스킬이 늘어남) | 2는 hp | 3은 스킬 쿨 다운 | 41/42는 공격력/방어력 증가
 	boolean exist, opened=false;
 	Image img, itemImg;
 	ItemBox() {

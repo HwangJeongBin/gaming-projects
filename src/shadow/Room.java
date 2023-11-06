@@ -2,12 +2,10 @@ package shadow;
 
 public class Room {
 	private boolean monster, item, visit, upStair, downStair;
-	private int floor, W, H, x, y, w, h;	// 너비랑 높이가 필요할까?
+	private int floor;	// 너비랑 높이가 필요할까?
 	Room() {
 		monster=false;
 		item=false;
-		w=W/3;
-		h=H/3;
 		setUpStair(false);
 		setDownStair(false);
 	}

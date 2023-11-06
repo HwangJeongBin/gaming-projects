@@ -136,7 +136,6 @@ public class DragonFrame{
 			    	}
 			    	else if(leftFlag) {
 			    		if(cnt>1) {
-			    			//m.hide(false);	// 쭈그리는 자세로 수정
 			    			m.moveLeft(2);
 			    			if(cnt%2==0) m.lookBehind(true);
 			    			else m.lookBehind(false);
@@ -145,7 +144,6 @@ public class DragonFrame{
 			    	}
 			    	else if(rightFlag) {
 			    		if(cnt>1) {
-			    			//m.hide(false);
 			    			m.moveRight(2);
 			    			if(cnt%2==0) m.lookFront(true);
 			    			else m.lookFront(false);

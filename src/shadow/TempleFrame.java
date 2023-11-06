@@ -432,7 +432,7 @@ public class TempleFrame {
         							m.getSkill(3);
         					        break;
         						case 2:
-        							m.incHp();
+        							if(m.getHp()>0) m.incHp();
         					        break;
         						case 3:
         							m.incCoolDown();
@@ -495,7 +495,7 @@ public class TempleFrame {
         							m.getSkill(3);
         					        break;
         						case 2:
-        							m.incHp();
+        							if(m.getHp()>0) m.incHp();
         					        break;
         						case 3:
         							m.incCoolDown();
@@ -556,7 +556,7 @@ public class TempleFrame {
         							m.getSkill(3);
         					        break;
         						case 2:
-        							m.incHp();
+        							if(m.getHp()>0) m.incHp();
         					        break;
         						case 3:
         							m.incCoolDown();

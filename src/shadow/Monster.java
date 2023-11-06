@@ -5,7 +5,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class Monster {
-	int x,y,w,h,attack,defense,hp,monN;	// monN은 몬스터 식별 번호
+	int x,y,w,h,attack,hp,monN;	// monN은 몬스터 식별 번호
 	boolean exist, damaged;
 	String []name = {"treeMonster", "snakeMonster", "spiderMonster", "blockMonster"};	// 몬스터 리스트
 	Image img;
@@ -46,12 +46,6 @@ public class Monster {
 	public void setAttack(int attack) {
 		this.attack = attack;
 	}
-	public int getDefense() {
-		return defense;
-	}
-	public void setDefense(int defense) {
-		this.defense = defense;
-	}
 	public boolean isExist() {
 		return exist;
 	}
@@ -75,13 +69,13 @@ public class Monster {
 	public void setMonN(int monN) {	// 몬스터 번호를 설정해주면 공격력과 방어력이 정해짐
 		this.monN = monN;
 		switch(monN) {
-		case 0: attack=1; defense=1; hp=4;	// 나무
+		case 0: attack=1; hp=4;	// 나무
 		break;
-		case 1: attack=2; defense=1; hp=4;	// 뱀
+		case 1: attack=2; hp=4;	// 뱀
 		break;
-		case 2: attack=3; defense=2; hp=4; w=150;	// 거미
+		case 2: attack=3; hp=4; w=150;	// 거미
 		break;
-		case 3: attack=1; defense=1; hp=6;	// 돌
+		case 3: attack=1; hp=6;	// 돌
 		break;
 		}
 	}
