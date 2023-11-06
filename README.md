@@ -1,4 +1,4 @@
-# Convenience-POS-System
+# Shadow Gaming Project
 
 소프트웨어학과 개인 게임 개발 프로젝트, 디자인과와의 협업
 
