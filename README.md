@@ -43,6 +43,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 ![pos](gameStory.png)
 ![pos](howToPlay1.png)
 ![pos](howToPlay2.png)
+<br>
 
 * 게임방법을 알려주는 창
 * 이미지 순서대로 게임 스토리, 스테이지1(DragonFrame), 스테이지2()에 대한 설명이다.
