@@ -7,7 +7,7 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 
 public class MainCharacter {
-	private int x,y,w,h,lv,Width,Height,roomN,floor,attack,defense,hp,skillN,coolDown=2;	// floor 위에서 부터 0,1,2층
+	private int x,y,w,h,lv,Width,Height,roomN,floor,attack,defense,hp,skillN,coolDown=0;	// floor 위에서 부터 0,1,2층
 	private Image img;
 	int skillX[] = new int[4];
 	int skillY[] = new int[4];

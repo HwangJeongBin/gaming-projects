@@ -131,6 +131,7 @@ public class TempleFrame {
 		gameOverH=0;
 		leftFlag=false;
 		rightFlag=false;
+		floor=1;
 		m = new MainCharacter(W,H);
         for(int i=0;i<top+2;i++) {
         	for(int j=0;j<3;j++) {
@@ -352,6 +353,8 @@ public class TempleFrame {
 		            	if(gameOverH>H) gameOverH=H;
 		            	if(gameOverCnt==60) {
 		            		restartFlag=true;
+		            		leftFlag=false;
+		            		rightFlag=false;
 		            		m.setX(W/2);
 		            		m.setY(m.getY()+100);
 		            	}
@@ -370,8 +373,8 @@ public class TempleFrame {
 		public void paintComponent(Graphics g) {
             super.paintComponent(g);
             if(gameEndingFlag) {
-            	if(gameEndingCnt<40) g.drawImage(darkEnding, 0, 0, W, H, this);
-            	else if(gameEndingCnt<120) g.drawImage(ending, 0, 0, W, H, this);
+            	if(gameEndingCnt<70) g.drawImage(darkEnding, 0, 0, W, H, this);
+            	else if(gameEndingCnt<200) g.drawImage(ending, 0, 0, W, H, this);
             	else {
             		frame.dispose();
             		new GameMenu();
