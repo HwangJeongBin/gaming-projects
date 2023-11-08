@@ -587,6 +587,9 @@ public class TempleFrame {
             for(int i=0;i<m.getCoolDown();i++) {
             	g.drawImage(sandglass, 25*i+W-150, 10, 20, 30, this);
             }
+            g.setFont(new Font("SansSerif",Font.BOLD,20));
+            g.setColor(Color.WHITE);
+            g.drawString(Integer.toString(floor)+"층", W-70, H-20);
             //g.setFont(new Font("monospaced",Font.BOLD,22));
             g.setColor(Color.WHITE);
             g.drawImage(attackIcon, 10, 40, 25, 25, this);
@@ -651,6 +654,7 @@ public class TempleFrame {
 			if(mainTurn&&!monAttack) {
 				if(new Rectangle(W-150, 10, 25*m.getCoolDown()+10, 30).contains(x,y)) {
 					m.useCoolDown();
+					return;
 				}
 				for(int i=0;i<4;i++) {
 					if(m.haveSkill(i)) {
