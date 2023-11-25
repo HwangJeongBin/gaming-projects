@@ -102,7 +102,9 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 <br>
 
 ![pos](TempleFrame.gif)
+
 ![pos](TempleFrame.png)
+
 <br>
 
 * MainCharacter(주인공), Room(던전 방), Monster(몬스터), ItemBox(아이템 상자) 클래스를 이용해 각각 개체의 데이터를 관리함. (반복문으로 던전의 하나의 방 당 하나의 객체가 할당 된다. 인덱스로 층과 방 번호를 구분)
