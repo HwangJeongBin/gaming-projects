@@ -157,7 +157,9 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 <br>
 
 ![pos](TempleFrameGameOver.png)
+
 ![pos](TempleFrameGameOver.gif)
+
 <br>
 
 * 캐릭터의 체력이 0이하로 떨어졌을 때 게임이 오버된다.
