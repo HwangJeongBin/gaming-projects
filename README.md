@@ -58,7 +58,7 @@ shadow(그림자를 기반으로 한 캐릭터에서 게임명을 고안)
 
 ### 3) DragonFrame
 <br>
-
+아래 이미지는 gif입니다!!
 ![pos](DragonFrame.gif)
 ![pos](DragonFrame.png)
 <br>
